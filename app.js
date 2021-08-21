@@ -3,31 +3,27 @@ const app = express();
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 require('dotenv/config');
+const cors = require('cors');
+
+const Product = require('./models/product');
+
+const categoriesRoutes = require('./routes/categories');
+const productsRoutes = require('./routes/products');
+const usersRoutes = require('./routes/users');
+const ordersRoutes = require('./routes/orders');
 
 
 const api = process.env.API_URL;
-
 app.use(express.json());
 app.use(morgan('tiny'));
+app.use(cors());
 
+app.use(`${api}/categories`, categoriesRoutes);
+app.use(`${api}/products`, productsRoutes);
+app.use(`${api}/users`, usersRoutes);
+app.use(`${api}/orders`, ordersRoutes);
 
-app.get(`${api}/products`, (req, res) => {
-   const product = {
-       id: 1,
-       name: 'dresser',
-       image: 'url'
-   }
-
-    res.send(product);
-  });
-  
-
-app.post(`${api}/products`, (req, res) => {
-    const newProduct = req.body;
-    res.send(newProduct);
-   });
-
-   mongoose.connect( process.env.CONNECTION_STRING ,
+mongoose.connect( process.env.CONNECTION_STRING ,
    { useNewUrlParser: true,
        useUnifiedTopology: true } 
        )
