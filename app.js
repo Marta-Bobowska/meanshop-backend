@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 require('dotenv/config');
 const cors = require('cors');
+const authJwt = require('./helpers/jwt');
+const errorHandler = require('./helpers/error-handler');
 
 const Product = require('./models/product');
 
@@ -17,6 +19,8 @@ const api = process.env.API_URL;
 app.use(express.json());
 app.use(morgan('tiny'));
 app.use(cors());
+app.use(authJwt());
+app.use(errorHandler);
 
 app.use(`${api}/categories`, categoriesRoutes);
 app.use(`${api}/products`, productsRoutes);
